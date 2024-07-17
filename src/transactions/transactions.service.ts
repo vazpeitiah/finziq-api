@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { CreateTransactionDto } from './dto/create-transaction.dto'
 import { UpdateTransactionDto } from './dto/update-transaction.dto'
 import { PrismaService } from 'src/prisma/prisma.service'
+import { TransactionType } from '@prisma/client'
 
 @Injectable()
 export class TransactionsService {
@@ -34,5 +35,15 @@ export class TransactionsService {
     return this.prisma.transaction.delete({
       where: { id }
     })
+  }
+
+  async calculateBalance() {
+    const transactions = await this.prisma.transaction.findMany()
+    return transactions.reduce((acc, transaction) => {
+      if (transaction.type === TransactionType.INCOME) {
+        return acc + transaction.amount
+      }
+      return acc - transaction.amount
+    }, 0)
   }
 }

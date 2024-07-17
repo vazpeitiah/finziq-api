@@ -12,6 +12,7 @@ import { CreateCategoryDto } from './dto/create-category.dto'
 import { UpdateCategoryDto } from './dto/update-category.dto'
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger'
 import { CategoryEntity } from './entities/category.entity'
+import { TransactionType } from '@prisma/client'
 
 @Controller('categories')
 @ApiTags('categories')
@@ -49,5 +50,11 @@ export class CategoriesController {
   @ApiOkResponse({ type: CategoryEntity })
   remove(@Param('id') id: string) {
     return this.categoriesService.remove(id)
+  }
+
+  @Get('types/:type')
+  @ApiOkResponse({ type: CategoryEntity, isArray: true })
+  findByType(@Param('type') type: TransactionType) {
+    return this.categoriesService.findByType(type)
   }
 }
