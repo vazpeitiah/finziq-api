@@ -31,6 +31,20 @@ $ pnpm run start:dev
 $ pnpm run start:prod
 ```
 
+## Create a migration
+
+```bash
+$ npx prisma migrate dev --name init
+```
+
+## Launch the app
+
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+
+## API Documentation
+
+Open [http://localhost:3000/api](http://localhost:3000/api) to view it in your browser.
+
 ## Test
 
 ```bash
