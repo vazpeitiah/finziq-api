@@ -1,4 +1,4 @@
-import { Account } from '@prisma/client'
+import { Account, AccountType } from '@prisma/client'
 import { ApiProperty } from '@nestjs/swagger'
 
 export class AccountEntity implements Account {
@@ -14,4 +14,8 @@ export class AccountEntity implements Account {
   createdAt: Date
   @ApiProperty()
   updatedAt: Date
+  @ApiProperty()
+  type: AccountType
+  @ApiProperty()
+  userId: string
 }

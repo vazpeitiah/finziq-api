@@ -6,13 +6,15 @@ export class TransactionEntity implements Transaction {
   id: string
   @ApiProperty()
   accountId: string
+  @ApiProperty({ required: false })
+  destinationAccountId: string
   @ApiProperty()
   subcategoryId: string
   @ApiProperty()
   amount: number
   @ApiProperty()
   date: Date
-  @ApiProperty()
+  @ApiProperty({ required: false })
   description: string
   @ApiProperty()
   type: TransactionType
@@ -20,4 +22,6 @@ export class TransactionEntity implements Transaction {
   createdAt: Date
   @ApiProperty()
   updatedAt: Date
+  @ApiProperty()
+  categoryId: string
 }

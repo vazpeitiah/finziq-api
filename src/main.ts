@@ -5,8 +5,8 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   const config = new DocumentBuilder()
-    .setTitle('Finziq API')
-    .setDescription('API for Finziq application.')
+    .setTitle('Morralla API')
+    .setDescription('API for Morralla application.')
     .setVersion('1.0')
     .build()
 

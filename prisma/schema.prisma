@@ -10,28 +10,44 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  password  String
+  name      String
+  active    Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Account   Account[]
+}
+
 model Account {
-  id             String           @id @default(uuid())
-  name           String
-  includeInTotal Boolean       @default(true)
-  active         Boolean       @default(true)
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  Transaction    Transaction[]
+  id                       String        @id @default(uuid())
+  type                     AccountType
+  name                     String
+  includeInTotal           Boolean       @default(true)
+  active                   Boolean       @default(true)
+  createdAt                DateTime      @default(now())
+  updatedAt                DateTime      @updatedAt
+  User                     User          @relation(fields: [userId], references: [id])
+  userId                   String
+  trasactions              Transaction[] @relation("Account")
+  trasactionsAsDestination Transaction[] @relation("DestinationAccount")
 }
 
 model Category {
-  id          String             @id @default(uuid())
+  id          String          @id @default(uuid())
   name        String
   type        TransactionType
   active      Boolean         @default(true)
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
   Subcategory Subcategory[]
+  Transaction Transaction[]
 }
 
 model Subcategory {
-  id          String           @id @default(uuid()) 
+  id          String        @id @default(uuid())
   name        String
   categoryId  String
   Category    Category      @relation(fields: [categoryId], references: [id])
@@ -42,21 +58,34 @@ model Subcategory {
 }
 
 model Transaction {
-  id            String          @id @default(uuid())
-  amount        Float
-  date          DateTime
-  description   String
-  accountId     String
-  Account       Account         @relation(fields: [accountId], references: [id])
-  subcategoryId String
-  Subcategory   Subcategory     @relation(fields: [subcategoryId], references: [id])
-  type          TransactionType
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
+  id                   String          @id @default(uuid())
+  amount               Float
+  date                 DateTime        @db.Date
+  description          String?
+  accountId            String
+  destinationAccountId String?
+  account              Account         @relation("Account", fields: [accountId], references: [id])
+  destinationAccount   Account?        @relation("DestinationAccount", fields: [destinationAccountId], references: [id])
+  categoryId           String
+  Category             Category        @relation(fields: [categoryId], references: [id])
+  subcategoryId        String?
+  Subcategory          Subcategory?    @relation(fields: [subcategoryId], references: [id])
+  type                 TransactionType
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
 }
 
 enum TransactionType {
   EXPENSE
   INCOME
   TRANSFER
+}
+
+enum AccountType {
+  CASH
+  BANK
+  CREDIT_CARD
+  DEBIT_CARD
+  INVESTMENT
+  OTHER
 }
