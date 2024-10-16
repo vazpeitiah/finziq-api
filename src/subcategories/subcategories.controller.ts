@@ -11,7 +11,7 @@ import { SubcategoriesService } from './subcategories.service'
 import { CreateSubcategoryDto } from './dto/create-subcategory.dto'
 import { UpdateSubcategoryDto } from './dto/update-subcategory.dto'
 import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger'
-import { TransactionEntity } from 'src/transactions/entities/transaction.entity'
+import { SubcategoryEntity } from './entities/subcategory.entity'
 
 @Controller('subcategories')
 @ApiTags('subcategories')
@@ -19,25 +19,25 @@ export class SubcategoriesController {
   constructor(private readonly subcategoriesService: SubcategoriesService) {}
 
   @Post()
-  @ApiCreatedResponse({ type: TransactionEntity })
+  @ApiCreatedResponse({ type: SubcategoryEntity })
   create(@Body() createSubcategoryDto: CreateSubcategoryDto) {
     return this.subcategoriesService.create(createSubcategoryDto)
   }
 
   @Get()
-  @ApiOkResponse({ type: TransactionEntity, isArray: true })
+  @ApiOkResponse({ type: SubcategoryEntity, isArray: true })
   findAll() {
     return this.subcategoriesService.findAll()
   }
 
   @Get(':id')
-  @ApiOkResponse({ type: TransactionEntity })
+  @ApiOkResponse({ type: SubcategoryEntity })
   findOne(@Param('id') id: string) {
     return this.subcategoriesService.findOne(id)
   }
 
   @Patch(':id')
-  @ApiOkResponse({ type: TransactionEntity })
+  @ApiOkResponse({ type: SubcategoryEntity })
   update(
     @Param('id') id: string,
     @Body() updateSubcategoryDto: UpdateSubcategoryDto
@@ -46,8 +46,14 @@ export class SubcategoriesController {
   }
 
   @Delete(':id')
-  @ApiOkResponse({ type: TransactionEntity })
+  @ApiOkResponse({ type: SubcategoryEntity })
   remove(@Param('id') id: string) {
     return this.subcategoriesService.remove(id)
+  }
+
+  @Get('/category/:categoryId')
+  @ApiOkResponse({ type: SubcategoryEntity, isArray: true })
+  findAllByCategory(@Param('categoryId') categoryId: string) {
+    return this.subcategoriesService.findAllByCategory(categoryId)
   }
 }
