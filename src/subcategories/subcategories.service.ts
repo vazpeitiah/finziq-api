@@ -48,4 +48,13 @@ export class SubcategoriesService {
       }
     })
   }
+
+  findAllByCategory(categoryId: string) {
+    return this.prisma.subcategory.findMany({
+      where: {
+        categoryId,
+        active: true
+      }
+    })
+  }
 }
