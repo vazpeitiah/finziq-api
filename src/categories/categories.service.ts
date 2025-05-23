@@ -52,11 +52,19 @@ export class CategoriesService {
     })
   }
 
-  findByType(type: TransactionType) {
-    return this.prisma.category.findMany({
+  async findByType(type: TransactionType) {
+    const categoriesWithSubcategories = await this.prisma.category.findMany({
       where: {
-        type: type
+        type
+      },
+      include: {
+        Subcategory: true
       }
     })
+    return categoriesWithSubcategories.map((category) => ({
+      ...category,
+      subcategories: category.Subcategory,
+      Subcategory: undefined
+    }))
   }
 }
